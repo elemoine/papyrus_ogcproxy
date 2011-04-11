@@ -38,7 +38,7 @@ papyrus_ogcproxy using the ``Configurator.include`` method::
 That's it! The OGC proxy is available at ``/ogcproxy``.
 
 Here is a test URL:
-http://localhost:5643/ogcproxy?url=http://wms.jpl.nasa.gov/wms.cgi?SERVICE=WMS&REQUEST=GetCapabilities
+http://localhost:6543/ogcproxy?url=http%3A%2F%2Fwms.jpl.nasa.gov%2Fwms.cgi%3FSERVICE%3DWMS%26REQUEST%3DGetCapabilities
 
 Run the tests
 -------------
