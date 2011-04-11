@@ -41,9 +41,7 @@ def ogcproxy(request):
     method = request.method
 
     # get body
-    body = None
-    if method in ("POST", "PUT"):
-        body = request.body
+    body = request.body if method in ("POST", "PUT") else None
 
     # forward request to target (without Host Header)
     http = Http()
