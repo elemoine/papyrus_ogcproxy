@@ -23,10 +23,9 @@ allowed_hosts = (
     )
 
 def ogcproxy(request):
-    if "url" not in request.params:
+    url = request.params.get("url")
+    if url is None:
         return HTTPBadRequest()
-
-    url = request.params["url"]
 
     # check for full url
     parsed_url = urlparse(url)
