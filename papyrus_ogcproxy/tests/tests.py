@@ -58,14 +58,6 @@ class OgcProxy(unittest.TestCase):
         from papyrus_ogcproxy import views
         views.allowed_hosts = ()
 
-    def test_forbidden_scheme(self):
-        from papyrus_ogcproxy.views import ogcproxy
-        from pyramid.testing import DummyRequest
-        request = DummyRequest(scheme='ftp')
-        response = ogcproxy(request)
-        from pyramid.httpexceptions import HTTPForbidden
-        self.assertTrue(isinstance(response, HTTPForbidden))
-
     def test_badrequest_url(self):
         from papyrus_ogcproxy.views import ogcproxy
         from pyramid.testing import DummyRequest

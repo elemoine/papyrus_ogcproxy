@@ -23,10 +23,6 @@ allowed_hosts = (
     )
 
 def ogcproxy(request):
-    scheme = request.scheme
-    if scheme not in ("http", "https"):
-        return HTTPForbidden()
-
     if "url" not in request.params:
         return HTTPBadRequest()
 
