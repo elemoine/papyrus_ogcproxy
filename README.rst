@@ -36,3 +36,14 @@ papyrus_ogcproxy using the ``Configurator.include`` method::
         config.include(papyrus_ogcproxy)
 
 That's it! The OGC proxy is available at ``/ogcproxy``.
+
+Here is a test URL:
+http://localhost:5643/ogcproxy?url=http://wms.jpl.nasa.gov/wms.cgi?SERVICE=WMS&REQUEST=GetCapabilities
+
+Run the tests
+-------------
+
+To run the tests install the ``nose``, ``mock`` and ``coverage`` packages in
+the Python environment, and execute::
+
+    $ nosetests --with-coverage
