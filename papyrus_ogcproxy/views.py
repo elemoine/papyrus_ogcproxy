@@ -33,18 +33,13 @@ def ogcproxy(request):
     if not parsed_url.netloc or parsed_url.scheme not in ("http", "https"):
         return HTTPBadRequest()
 
-    # get method
-    method = request.method
-
-    # get body
-    body = request.body if method in ("POST", "PUT") else None
-
     # forward request to target (without Host Header)
     http = Http()
     h = dict(request.headers)
     h.pop("Host", h)
     try:
-        resp, content = http.request(url, method=method, body=body, headers=h)
+        resp, content = http.request(url, method=request.method, 
+                                     body=request.body, headers=h)
     except:
         return HTTPBadGateway()
 
