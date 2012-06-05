@@ -1,23 +1,8 @@
-import os
 import unittest
 import mock
 
 from pyramid import testing
 
-class AddRouteTests(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-
-    def tearDown(self):
-        testing.tearDown()
-
-    def test(self):
-        from papyrus_ogcproxy import add_route
-        route = add_route(self.config)
-        from pyramid.urldispatch import Route
-        self.assertTrue(isinstance(route, Route))
-        self.assertEqual(route.name, 'ogcproxy')
-        self.assertEqual(route.pattern, '/ogcproxy')
 
 class IncludeMeTests(unittest.TestCase):
     def setUp(self):
@@ -30,8 +15,9 @@ class IncludeMeTests(unittest.TestCase):
         from pyramid.interfaces import IRoutesMapper
         from papyrus_ogcproxy import includeme
         views = []
-        def dummy_add_view(**kw):
-            views.append(kw)
+
+        def dummy_add_view(view, route_name=''):
+            views.append(view)
         self.config.add_view = dummy_add_view
         includeme(self.config)
         self.assertEqual(len(views), 1)
@@ -41,6 +27,7 @@ class IncludeMeTests(unittest.TestCase):
         self.assertEqual(routes[0].name, 'ogcproxy')
         self.assertEqual(routes[0].path, '/ogcproxy')
 
+
 class MainTests(unittest.TestCase):
     def test(self):
         from papyrus_ogcproxy import main
@@ -48,7 +35,7 @@ class MainTests(unittest.TestCase):
         from pyramid.router import Router
         self.assertTrue(isinstance(app, Router))
 
-#class TileCacheTests(unittest.TestCase):
+
 class OgcProxy(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
@@ -129,7 +116,6 @@ class OgcProxy(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html')
 
     def test_allowed_content_type(self):
-        from papyrus_ogcproxy import views
         from papyrus_ogcproxy.views import ogcproxy
         from pyramid.testing import DummyRequest
         url = 'http://wms.jpl.nasa.gov/wms.cgi?' \

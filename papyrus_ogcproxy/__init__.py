@@ -1,16 +1,15 @@
 from pyramid.config import Configurator
 
-def add_route(config):
-    """ Add a route to the ogcproxy view callable. The proxy
+def add_view(config):
+    """ Add a view and a route to the ogcproxy view callable. The proxy
     service is made available at ``/ogcproxy``.
 
     Arguments:
 
     * ``config``: the ``pyramid.config.Configurator`` object.
     """
-    return config.add_route('ogcproxy', '/ogcproxy',
-                            view='papyrus_ogcproxy.views:ogcproxy'
-                            )
+    config.add_route('ogcproxy', '/ogcproxy')
+    config.add_view('papyrus_ogcproxy.views:ogcproxy', route_name='ogcproxy')
 
 def includeme(config):
     """ The callable making it possible to include papyrus_ogcproxy
@@ -23,7 +22,7 @@ def includeme(config):
 
     * ``config``: the ``pyramid.config.Configurator`` object.
     """
-    add_route(config)
+    add_view(config)
 
 def main(global_config, **settings):
     """ Return the Pyramid application.
