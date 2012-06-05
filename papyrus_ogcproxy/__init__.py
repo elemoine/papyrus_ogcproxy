@@ -8,9 +8,9 @@ def add_route(config):
 
     * ``config``: the ``pyramid.config.Configurator`` object.
     """
-    return config.add_route('ogcproxy', '/ogcproxy',
-                            view='papyrus_ogcproxy.views:ogcproxy'
-                            )
+    route = config.add_route('ogcproxy', '/ogcproxy')
+    config.add_view('papyrus_ogcproxy.views:ogcproxy', route_name='ogcproxy')
+    return route
 
 def includeme(config):
     """ The callable making it possible to include papyrus_ogcproxy
