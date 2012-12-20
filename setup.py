@@ -9,7 +9,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 requires = ['pyramid', 'WebError', 'httplib2']
 
 setup(name='papyrus_ogcproxy',
-      version='0.1',
+      version='0.2dev1',
       description='papyrus_ogcproxy',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
