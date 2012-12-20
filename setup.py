@@ -11,7 +11,7 @@ requires = ['pyramid', 'WebError', 'httplib2']
 setup(name='papyrus_ogcproxy',
       version='0.1',
       description='papyrus_ogcproxy',
-      long_description=README + '\n\n' +  CHANGES,
+      long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Programming Language :: Python",
         "Framework :: Pylons",
@@ -28,7 +28,7 @@ setup(name='papyrus_ogcproxy',
       install_requires=requires,
       tests_require=requires,
       test_suite="papyrus_ogcproxy",
-      entry_points = """\
+      entry_points="""
       [paste.app_factory]
       main = papyrus_ogcproxy:main
       """,
