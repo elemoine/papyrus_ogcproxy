@@ -23,7 +23,7 @@ file.
 Set up
 ------
 
-Using papyrus_ogcproxy to set an OGC proxy in a Pyramid application is easy.
+Using papyrus_ogcproxy to set up an OGC proxy in a Pyramid application is easy.
 
 Edit the application's main file, ``__init__.py``, and register
 papyrus_ogcproxy using the ``Configurator.include`` method::
@@ -38,12 +38,45 @@ papyrus_ogcproxy using the ``Configurator.include`` method::
 That's it! The OGC proxy is available at ``/ogcproxy``.
 
 Here is a test URL:
-http://localhost:6543/ogcproxy?url=http%3A%2F%2Fwms.jpl.nasa.gov%2Fwms.cgi%3FSERVICE%3DWMS%26REQUEST%3DGetCapabilities
+http://localhost:6543/ogcproxy?url=http%3A%2F%2Fmap1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi%3FSERVICE%3DWMTS%26REQUEST%3DGetCapabilities
+
+Using a proxy for the proxy
+---------------------------
+
+If the requests made by the OGC proxy should be made through a proxy, the additional
+package ``pysocks`` is required. After the installation of this package, configure
+the proxy::
+
+
+    from papyrus_ogcproxy import views as ogcproxy_views
+    from httplib2 import ProxyInfo
+    import socks
+    ogcproxy_views.proxy_info = ProxyInfo(socks.SOCKS5, 'localhost', 1080)
+
+With this configuration the OGC proxy will make requests through the proxy
+``localhost:1080``. For information please refer to the
+documentation of `PySocks <https://github.com/Anorov/PySocks>`_ and
+`httplib2 <http://httplib2.googlecode.com/hg/doc/html/libhttplib2.html#httplib2.ProxyInfo>`_.
+
+
+Set up a development environment
+--------------------------------
+
+To set up a development environment with virtualenv, run the following
+commands::
+
+    $ virtualenv venv
+    $ venv/bin/python setup.py develop
+    $ venv/bin/pip install -r requirements-dev.txt
 
 Run the tests
 -------------
 
-To run the tests install the ``nose``, ``mock`` and ``coverage`` packages in
-the Python environment, and execute::
+To run the tests::
 
-    $ nosetests --with-coverage
+    $ venv/bin/nosetests --with-coverage
+
+One test assumes that a proxy server is running at ``localhost:1080``. To start
+a proxy run::
+
+    $ ssh -N -D 0.0.0.0:1080 localhost
