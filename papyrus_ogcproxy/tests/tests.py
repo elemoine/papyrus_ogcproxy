@@ -44,6 +44,7 @@ class OgcProxy(unittest.TestCase):
         testing.tearDown()
         from papyrus_ogcproxy import views
         views.allowed_hosts = ()
+        views.proxy_info = None
 
     def test_badrequest_url(self):
         from papyrus_ogcproxy.views import ogcproxy
@@ -126,3 +127,26 @@ class OgcProxy(unittest.TestCase):
         self.assertTrue(isinstance(response, Response))
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.content_type, 'text/xml')
+
+    def test_proxy_info(self):
+        """ Running this test assumes that a proxy is running at localhost:1080.
+        To start a proxy run:
+
+            ssh -N -D 0.0.0.0:1080 localhost
+
+        """
+        from papyrus_ogcproxy import views
+        from papyrus_ogcproxy.views import ogcproxy
+        from pyramid.testing import DummyRequest
+        from httplib2 import ProxyInfo
+        import socks
+
+        views.allowed_hosts = ('www.google.com')
+        views.proxy_info = ProxyInfo(socks.SOCKS5, 'localhost', 1080)
+        request = DummyRequest(scheme='http',
+                               params={'url': 'http://www.google.com'})
+        response = ogcproxy(request)
+        from pyramid.response import Response
+        self.assertTrue(isinstance(response, Response))
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.content_type, 'text/html')

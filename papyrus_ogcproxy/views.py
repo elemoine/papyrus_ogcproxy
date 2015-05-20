@@ -22,6 +22,13 @@ allowed_hosts = (
     # list allowed hosts here (no port limiting)
     )
 
+# The proxy to use to make requests (default: None).
+#
+# Example usage:
+#   views.proxy_info = ProxyInfo(socks.SOCKS5, 'localhost', 1080)
+#
+proxy_info = None
+
 def ogcproxy(request):
     url = request.params.get("url")
     if url is None:
@@ -33,7 +40,9 @@ def ogcproxy(request):
         return HTTPBadRequest()
 
     # forward request to target (without Host Header)
-    http = Http(disable_ssl_certificate_validation=True)
+    http = Http(
+        disable_ssl_certificate_validation=True,
+        proxy_info=proxy_info)
     h = dict(request.headers)
     h.pop("Host", h)
     try:
