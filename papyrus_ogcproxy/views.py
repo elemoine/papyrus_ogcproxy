@@ -32,12 +32,12 @@ proxy_info = None
 def ogcproxy(request):
     url = request.params.get("url")
     if url is None:
-        return HTTPBadRequest()
+        return HTTPBadRequest("Missing url in the query string")
 
     # check for full url
     parsed_url = urlparse(url)
     if not parsed_url.netloc or parsed_url.scheme not in ("http", "https"):
-        return HTTPBadRequest()
+        return HTTPBadRequest("Wrong scheme")
 
     # forward request to target (without Host Header)
     http = Http(
@@ -57,9 +57,9 @@ def ogcproxy(request):
         if not ct.split(";")[0] in allowed_content_types:
             # allow any content type from allowed hosts (any port)
             if not parsed_url.netloc in allowed_hosts:
-                return HTTPForbidden()
+                return HTTPForbidden("Wrong returned content type")
     else:
-        return HTTPNotAcceptable()
+        return HTTPNotAcceptable("No returned content type")
 
     response = Response(content, status=resp.status,
                         headers={"Content-Type": ct})
