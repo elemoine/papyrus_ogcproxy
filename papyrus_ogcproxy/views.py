@@ -22,12 +22,21 @@ allowed_hosts = (
     # list allowed hosts here (no port limiting)
     )
 
+forwarded_headers = (
+    "Accept-Language",
+    "Accept-Encoding",
+    "Accept",
+    "Cache-Control",
+    "Content-Type",
+)
+
 # The proxy to use to make requests (default: None).
 #
 # Example usage:
 #   views.proxy_info = ProxyInfo(socks.SOCKS5, 'localhost', 1080)
 #
 proxy_info = None
+
 
 def ogcproxy(request):
     url = request.params.get("url")
@@ -43,11 +52,13 @@ def ogcproxy(request):
     http = Http(
         disable_ssl_certificate_validation=True,
         proxy_info=proxy_info)
-    h = dict(request.headers)
-    h.pop("Host", h)
+
+    headers = {h: request.headers[h] for h in forwarded_headers if h in request.headers}
+
     try:
-        resp, content = http.request(url, method=request.method, 
-                                     body=request.body, headers=h)
+        resp, content = http.request(
+            url, method=request.method, body=request.body, headers=headers
+        )
     except:
         return HTTPBadGateway()
 
