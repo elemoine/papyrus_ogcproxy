@@ -8,19 +8,19 @@ from pyramid.response import Response
 
 allowed_content_types = (
     "application/xml", "text/xml",
-    "application/vnd.ogc.se_xml",           # OGC Service Exception
-    "application/vnd.ogc.se+xml",           # OGC Service Exception
-    "application/vnd.ogc.success+xml",      # OGC Success (SLD Put)
-    "application/vnd.ogc.wms_xml",          # WMS Capabilities
-    "application/vnd.ogc.context+xml",      # WMC
-    "application/vnd.ogc.gml",              # GML
-    "application/vnd.ogc.sld+xml",          # SLD
-    "application/vnd.google-earth.kml+xml", # KML
-    )
+    "application/vnd.ogc.se_xml",            # OGC Service Exception
+    "application/vnd.ogc.se+xml",            # OGC Service Exception
+    "application/vnd.ogc.success+xml",       # OGC Success (SLD Put)
+    "application/vnd.ogc.wms_xml",           # WMS Capabilities
+    "application/vnd.ogc.context+xml",       # WMC
+    "application/vnd.ogc.gml",               # GML
+    "application/vnd.ogc.sld+xml",           # SLD
+    "application/vnd.google-earth.kml+xml",  # KML
+)
 
 allowed_hosts = (
     # list allowed hosts here (no port limiting)
-    )
+)
 
 forwarded_headers = (
     "Accept-Language",
@@ -63,11 +63,11 @@ def ogcproxy(request):
         return HTTPBadGateway()
 
     # check for allowed content types
-    if resp.has_key("content-type"):
+    if "content-type" in resp:
         ct = resp["content-type"]
         if not ct.split(";")[0] in allowed_content_types:
             # allow any content type from allowed hosts (any port)
-            if not parsed_url.netloc in allowed_hosts:
+            if parsed_url.netloc not in allowed_hosts:
                 return HTTPForbidden("Wrong returned content type")
     else:
         return HTTPNotAcceptable("No returned content type")
